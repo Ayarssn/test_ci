@@ -52,20 +52,8 @@ jobs:
 
     - name: Run W3C HTML Validator
       run: |
-        set -e
-        FAILED=0
-        for file in $(find frontend -name "*.html"); do
-          echo "🔍 Validating $file"
-          if ! cat "$file" | docker run --rm -i ghcr.io/validator/validator > /dev/null; then
-            echo "❌ Validation failed for $file"
-            FAILED=1
-          fi
-        done
-        if [ "$FAILED" -ne 0 ]; then
-          echo "❌ One or more HTML files failed validation."
-          exit 1
-        else
-          echo "✅ All HTML files passed validation."
-        fi
+        docker run --rm \
+        -v "$PWD/frontend:/usr/local/tomcat/webapps/ROOT" \
+        ghcr.io/validator/validator
 
 
