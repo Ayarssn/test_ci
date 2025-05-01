@@ -52,10 +52,8 @@ jobs:
 
     - name: Run W3C HTML Validator
       run: |
-        - name: Run W3C HTML Validator
-  run: |
-    find public -name "*.html" | while read file; do
-      echo "Validating $file"
-      cat "$file" | docker run --rm -i ghcr.io/validator/validator
-    done
+        find public -name "*.html" | while read file; do
+          echo "Validating $file"
+          cat "$file" | docker run --rm -i ghcr.io/validator/validator
+        done
 
