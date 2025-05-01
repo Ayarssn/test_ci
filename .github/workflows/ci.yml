@@ -52,4 +52,4 @@ jobs:
 
     - name: Run W3C HTML Validator
       run: |
-        docker run --rm -v "$PWD":/site validator/validator /site/public
+        docker run --rm -v "$PWD":/site ghcr.io/validator/validator /site/public
