@@ -54,7 +54,7 @@ jobs:
       run: |
         set -e
         FAILED=0
-        for file in $(find public -name "*.html"); do
+        for file in $(find frontend -name "*.html"); do
           echo "🔍 Validating $file"
           if ! cat "$file" | docker run --rm -i ghcr.io/validator/validator > /dev/null; then
             echo "❌ Validation failed for $file"
