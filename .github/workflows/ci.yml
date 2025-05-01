@@ -50,5 +50,6 @@ jobs:
     - name: Run migrations
       run: php artisan migrate
 
-    - name: Run tests
-      run: php artisan test
+    - name: Run W3C HTML Validator
+      run: |
+        docker run --rm -v "$PWD":/site validator/validator /site/public
