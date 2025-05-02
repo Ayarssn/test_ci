@@ -52,6 +52,6 @@ jobs:
 
     - name: Run W3C HTML Validator
       run: |
-        docker run --rm -v "$PWD/frontend":/work ghcr.io/validator/validator java -jar /vnu.jar /work
+        docker run --rm -v "$PWD/frontend":/app ghcr.io/validator/validator vnu /app
 
 
