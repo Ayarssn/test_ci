@@ -52,8 +52,6 @@ jobs:
 
     - name: Run W3C HTML Validator
       run: |
-        docker run --rm \
-        -v "$PWD/frontend:/usr/local/tomcat/webapps/ROOT" \
-        ghcr.io/validator/validator
+        docker run --rm -v "$PWD/frontend":/work ghcr.io/validator/validator /work
 
 
