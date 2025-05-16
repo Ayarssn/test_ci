@@ -1,4 +1,4 @@
-name: Laravel CI
+name: Laravel CI/CD
 
 on:
   push:
@@ -50,8 +50,38 @@ jobs:
     - name: Run migrations
       run: php artisan migrate
 
-    - name: Run W3C HTML Validator
+    - name: Set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+
+    - name: Download JMeter
       run: |
-        docker run --rm -v "$PWD/frontend/html":/app ghcr.io/validator/validator vnu /app
+        wget https://downloads.apache.org/jmeter/binaries/apache-jmeter-5.6.2.tgz
+        tar -xzf apache-jmeter-5.6.2.tgz
 
+    - name: Run JMeter Tests
+      run: |
+        ./apache-jmeter-5.6.2/bin/jmeter -n -t ./jmeter/TestCI.jmx -l results.jtl -e -o report
 
+    - name: Check Test Results
+      run: |
+        echo "Analyzing JMeter results..."
+        error_rate=$(grep -c "false" results.jtl || true)
+        total_requests=$(wc -l < results.jtl)
+        if [ $error_rate -gt 0 ]; then
+          echo "Error rate is too high: $error_rate failed requests out of $total_requests"
+          exit 1
+        fi
+
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: jmeter-results
+        path: |
+          results.jtl
+          report/
+
+ 
